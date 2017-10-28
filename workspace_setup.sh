@@ -57,6 +57,10 @@ while [ $STARTED -ne 1 ]; do
 		echo '> Decompiling Package (xar)'
 		xar -xf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C /tmp/TeamWikiInstallation/extraction
 
+		echo '> Detatching'
+		JAVA_VOLUME="$(diskutil info "/Volumes/$JAVA_PATH" | awk '/Device Node/ {print $3}')"
+		hdiutil -quiet detach "$JAVA_VOLUME"
+
 		JDK_PKG_JDK="$(ls /tmp/TeamWikiInstallation/extraction | awk '/jdk/')"
 		JAVA_JDK="$(echo "jdk180151.pkg" | awk -F. '{print $1}')"
 		echo '> Making extraction/jdk folder'
@@ -76,10 +80,6 @@ while [ $STARTED -ne 1 ]; do
 
 		echo '> Removing extraction folder'
 		rm -rf /tmp/TeamWikiInstallation/extraction
-
-		echo '> Detatching'
-		JAVA_VOLUME="$(diskutil info "/Volumes/$JAVA_PATH" | awk '/Device Node/ {print $3}')"
-		hdiutil -quiet detach "$JAVA_VOLUME"
 
 		echo '> Removing jars folder'
 		rm -rf /tmp/TeamWikiInstallation/jars
