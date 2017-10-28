@@ -1,10 +1,12 @@
 #!/bin/bash
 
-JETBRAINS_TOOLBOX_VERSION="1.5.2871"
-JAVA_JDK_URL="http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-macosx-x64.dmg"
-
-read -p "By executing this script, you agree you have read the licenses for all software that will be downloaded [y/N]: " input
+read -p "By executing this script, you agree you have read the licenses for all software that will be downloaded [y/N]: " input < /dev/tty
 case $input in [Yy] )
+
+	JETBRAINS_TOOLBOX_VERSION="1.5.2871"
+	JAVA_JDK_URL="http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-macosx-x64.dmg"
+
+	mkdir -p /tmp/TeamWikiInstallation
 	# Make applications folder if does not exist
 	echo Making Applications folder
 	mkdir -p $HOME/Applications
@@ -34,30 +36,30 @@ case $input in [Yy] )
 	echo "Installing Java 8 ☕️"
 
 	echo '> Creating jars folder'
-	mkdir -p jars
+	mkdir -p /tmp/TeamWikiInstallation/jars
 
 	echo '> Downloading Java 8 JDK'
-	curl -Lk --header "Cookie: oraclelicense=accept-securebackup-cookie" "$JAVA_JDK_URL" -o jars/java_jdk.dmg
+	curl -Lk --header "Cookie: oraclelicense=accept-securebackup-cookie" "$JAVA_JDK_URL" -o /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
 	echo '> Attatching'
-	hdiutil attach jars/java_jdk.dmg
+	hdiutil attach /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
 	echo '> Creating extraction folder'
-	mkdir -p extraction
+	mkdir -p /tmp/TeamWikiInstallation/extraction
 
 	JAVA_PATH="$(ls /Volumes/ | awk '/JDK/' | head -1)"
 	JAVA_PKG="$(ls "/Volumes/$JAVA_PATH" | awk '/JDK/')"
 	echo '> Decompiling Package (xar)'
-	xar -xvf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C extraction
+	xar -xvf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C /tmp/TeamWikiInstallation/extraction
 
-	JDK_PKG_JDK="$(ls extraction | awk '/jdk/')"
+	JDK_PKG_JDK="$(ls /tmp/TeamWikiInstallation/extraction | awk '/jdk/')"
 	JAVA_JDK="$(echo "jdk180151.pkg" | awk -F. '{print $1}')"
 	echo '> Making extraction/jdk folder'
-	mkdir -p "extraction/$JAVA_JDK"
+	mkdir -p "/tmp/TeamWikiInstallation/extraction/$JAVA_JDK"
 
 	echo '> Decompiling Nested Package (tar)'
-	mkdir -p extraction/nested
-	tar -xvf "extraction/$JDK_PKG_JDK/Payload" -C "extraction/$JAVA_JDK"
+	mkdir -p /tmp/TeamWikiInstallation/extraction/nested
+	tar -xvf "/tmp/TeamWikiInstallation/extraction/$JDK_PKG_JDK/Payload" -C "/tmp/TeamWikiInstallation/extraction/$JAVA_JDK"
 
 	echo '> Making Folder ~/Library/Java/JavaVirtualMachines'
 	mkdir -p "$HOME/Library/Java/JavaVirtualMachines"
@@ -65,17 +67,17 @@ case $input in [Yy] )
 	JAVA_CP_INTO_FOLDER="$(echo $JAVA_JDK | sed -E 's:([a-z0-9]{4})([0-9])([0-9])([0-9]{3}).*:\1.\2.\3_\4.jdk:')"
 	JAVA_CP_FULL_FOLDER="$HOME/Library/Java/JavaVirtualMachines/$JAVA_CP_INTO_FOLDER"
 	echo '> Copying Java Folders'
-	cp -R "extraction/$JAVA_JDK" "$JAVA_CP_FULL_FOLDER"
+	cp -R "/tmp/TeamWikiInstallation/extraction/$JAVA_JDK" "$JAVA_CP_FULL_FOLDER"
 
 	echo '> Removing extraction folder'
-	rm -rf extraction
+	rm -rf /tmp/TeamWikiInstallation/extraction
 
 	echo '> Detatching'
 	JAVA_VOLUME="$(diskutil info "/Volumes/$JAVA_PATH" | awk '/Device Node/ {print $3}')"
 	hdiutil detach "$JAVA_VOLUME"
 
 	echo '> Removing jars folder'
-	rm -rf jars
+	rm -rf /tmp/TeamWikiInstallation/jars
 
 	echo '> Modifying ~/.bash_profile'
 	echo "export JAVA_HOME=$JAVA_CP_FULL_FOLDER/Contents/Home/" >> $HOME/.bash_profile
@@ -99,5 +101,7 @@ case $input in [Yy] )
 
 	echo '> Removing installation dmg'
 	rm kraken.dmg
+
+	rm -rf /tmp/TeamWikiInstallation
 
 esac
