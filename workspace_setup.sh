@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -p "By executing this script, you agree you have read the licenses for all software that will be downloaded [y/N]: " input < /dev/tty
+read -p "By executing this script, you agree you have read the licenses for all software that will be installed [y/N]: " input < /dev/tty
 case $input in [Yy] )
 
 	JETBRAINS_TOOLBOX_VERSION="1.5.2871"
