@@ -114,7 +114,7 @@ while [ $STARTED -ne 1 ]; do
 		;;
 
 		*)
-		printf "\n[!!!] Installation stopped. To accept terms, type 'y' and then press 'ENTER' [!!!]\n\n"
+		printf "\n⚠️  Installation stopped. To accept terms, type 'y' and then press 'ENTER'  ⚠️\n\n"
 		;;
 	esac
 done
