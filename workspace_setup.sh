@@ -23,13 +23,13 @@ while [ $STARTED -ne 1 ]; do
 		curl -L "https://download.jetbrains.com/toolbox/jetbrains-toolbox-$JETBRAINS_TOOLBOX_VERSION.dmg" -o toolbox.dmg
 
 		echo '> Attatching'
-		hdiutil attach toolbox.dmg
+		hdiutil -quiet attach toolbox.dmg
 
 		echo '> Copying'
 		cp -R '/Volumes/JetBrains Toolbox/JetBrains Toolbox.app' $HOME/Applications/
 
 		echo '> Detatching'
-		hdiutil detach `diskutil info '/Volumes/JetBrains Toolbox/' | awk '/Device Node/ {print $3}'`
+		hdiutil -quiet detach `diskutil info '/Volumes/JetBrains Toolbox/' | awk '/Device Node/ {print $3}'`
 
 		echo '> Removing installation dmg'
 		rm toolbox.dmg
@@ -47,7 +47,7 @@ while [ $STARTED -ne 1 ]; do
 		curl -Lk --header "Cookie: oraclelicense=accept-securebackup-cookie" "$JAVA_JDK_URL" -o /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
 		echo '> Attatching'
-		hdiutil attach /tmp/TeamWikiInstallation/jars/java_jdk.dmg
+		hdiutil -quiet attach /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
 		echo '> Creating extraction folder'
 		mkdir -p /tmp/TeamWikiInstallation/extraction
@@ -79,7 +79,7 @@ while [ $STARTED -ne 1 ]; do
 
 		echo '> Detatching'
 		JAVA_VOLUME="$(diskutil info "/Volumes/$JAVA_PATH" | awk '/Device Node/ {print $3}')"
-		hdiutil detach "$JAVA_VOLUME"
+		hdiutil -quiet detach "$JAVA_VOLUME"
 
 		echo '> Removing jars folder'
 		rm -rf /tmp/TeamWikiInstallation/jars
@@ -96,13 +96,13 @@ while [ $STARTED -ne 1 ]; do
 		curl -L https://release.gitkraken.com/darwin/installGitKraken.dmg -o kraken.dmg
 
 		echo '> Attatching'
-		hdiutil attach kraken.dmg
+		hdiutil -quiet attach kraken.dmg
 
 		echo '> Copying'
 		cp -R '/Volumes/Install GitKraken/GitKraken.app' ~/Applications/
 
 		echo '> Detatching'
-		hdiutil detach `diskutil info '/Volumes/Install GitKraken' | awk '/Device Node/ {print $3}'`
+		hdiutil -quiet detach `diskutil info '/Volumes/Install GitKraken' | awk '/Device Node/ {print $3}'`
 
 		echo '> Removing installation dmg'
 		rm kraken.dmg
