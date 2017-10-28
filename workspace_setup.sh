@@ -15,6 +15,7 @@ while [ $STARTED -ne 1 ]; do
 		echo Making Applications folder
 		mkdir -p $HOME/Applications
 
+		echo 'Starting Script 🎬'
 		# Install Toolbox
 		echo 'Installing JetBrains Toolbox 🔧'
 
@@ -54,7 +55,7 @@ while [ $STARTED -ne 1 ]; do
 		JAVA_PATH="$(ls /Volumes/ | awk '/JDK/' | head -1)"
 		JAVA_PKG="$(ls "/Volumes/$JAVA_PATH" | awk '/JDK/')"
 		echo '> Decompiling Package (xar)'
-		xar -xvf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C /tmp/TeamWikiInstallation/extraction
+		xar -xf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C /tmp/TeamWikiInstallation/extraction
 
 		JDK_PKG_JDK="$(ls /tmp/TeamWikiInstallation/extraction | awk '/jdk/')"
 		JAVA_JDK="$(echo "jdk180151.pkg" | awk -F. '{print $1}')"
@@ -63,7 +64,7 @@ while [ $STARTED -ne 1 ]; do
 
 		echo '> Decompiling Nested Package (tar)'
 		mkdir -p /tmp/TeamWikiInstallation/extraction/nested
-		tar -xvf "/tmp/TeamWikiInstallation/extraction/$JDK_PKG_JDK/Payload" -C "/tmp/TeamWikiInstallation/extraction/$JAVA_JDK"
+		tar -xf "/tmp/TeamWikiInstallation/extraction/$JDK_PKG_JDK/Payload" -C "/tmp/TeamWikiInstallation/extraction/$JAVA_JDK"
 
 		echo '> Making Folder ~/Library/Java/JavaVirtualMachines'
 		mkdir -p "$HOME/Library/Java/JavaVirtualMachines"
@@ -106,7 +107,10 @@ while [ $STARTED -ne 1 ]; do
 		echo '> Removing installation dmg'
 		rm kraken.dmg
 
+		echo 'Removing extra garbage 🗑️'
 		rm -rf /tmp/TeamWikiInstallation
+
+		echo 'Script completed! 🙌'
 		;;
 
 		*)
