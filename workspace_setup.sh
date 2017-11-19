@@ -22,13 +22,13 @@ while [ $STARTED -ne 1 ]; do
 		echo '> Downloading'
 		curl -L "https://download.jetbrains.com/toolbox/jetbrains-toolbox-$JETBRAINS_TOOLBOX_VERSION.dmg" -o toolbox.dmg
 
-		echo '> Attatching'
+		echo '> Attaching'
 		hdiutil attach -quiet  toolbox.dmg
 
 		echo '> Copying'
 		cp -R '/Volumes/JetBrains Toolbox/JetBrains Toolbox.app' $HOME/Applications/
 
-		echo '> Detatching'
+		echo '> Detaching'
 		hdiutil detach -quiet  `diskutil info '/Volumes/JetBrains Toolbox/' | awk '/Device Node/ {print $3}'`
 
 		echo '> Removing installation dmg'
@@ -46,7 +46,7 @@ while [ $STARTED -ne 1 ]; do
 		echo '> Downloading Java 8 JDK'
 		curl -Lk --header "Cookie: oraclelicense=accept-securebackup-cookie" "$JAVA_JDK_URL" -o /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
-		echo '> Attatching'
+		echo '> Attaching'
 		hdiutil attach -quiet  /tmp/TeamWikiInstallation/jars/java_jdk.dmg
 
 		echo '> Creating extraction folder'
@@ -57,7 +57,7 @@ while [ $STARTED -ne 1 ]; do
 		echo '> Decompiling Package (xar)'
 		xar -xf "/Volumes/$JAVA_PATH/$JAVA_PKG" -C /tmp/TeamWikiInstallation/extraction
 
-		echo '> Detatching'
+		echo '> Detaching'
 		JAVA_VOLUME="$(diskutil info "/Volumes/$JAVA_PATH" | awk '/Device Node/ {print $3}')"
 		hdiutil detach -quiet  "$JAVA_VOLUME"
 
@@ -95,13 +95,13 @@ while [ $STARTED -ne 1 ]; do
 		echo "Installing Git Kraken 🐙"
 		curl -L https://release.gitkraken.com/darwin/installGitKraken.dmg -o kraken.dmg
 
-		echo '> Attatching'
+		echo '> Attaching'
 		hdiutil attach -quiet  kraken.dmg
 
 		echo '> Copying'
 		cp -R '/Volumes/Install GitKraken/GitKraken.app' ~/Applications/
 
-		echo '> Detatching'
+		echo '> Detaching'
 		hdiutil detach -quiet  `diskutil info '/Volumes/Install GitKraken' | awk '/Device Node/ {print $3}'`
 
 		echo '> Removing installation dmg'
